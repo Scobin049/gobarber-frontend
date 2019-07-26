@@ -6,9 +6,12 @@ import { updateProfileSuccess, updateProfileFailure } from './actions';
 
 export function* updataProfile({ payload }) {
   try {
-    const { name, ...rest } = payload.data;
+    const { name, email, avatar_id, ...rest } = payload.data;
 
-    const profile = Object.assign({ name }, rest.oldPassword ? rest : {});
+    const profile = Object.assign(
+      { name, email, avatar_id },
+      rest.oldPassword ? rest : {}
+    );
 
     const response = yield call(api.put, 'users', profile);
 
@@ -16,7 +19,6 @@ export function* updataProfile({ payload }) {
 
     yield put(updateProfileSuccess(response.data));
   } catch (err) {
-    console.tron.log(err);
     toast.error('Erro ao atualizar perfil');
     yield put(updateProfileFailure());
   }
